@@ -1,0 +1,29 @@
+name: Build and Generate SBOM
+
+on:
+  workflow_dispatch:   # Manuel çalıştırma
+  push:
+    branches:
+      - main        # Main branch'e push olunca da çalışacak
+
+jobs:
+  build-and-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+      - name: Install Syft
+        run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh
+
+      - name: Generate SBOM
+        run: ./syft my-app:latest -o json > sbom.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.json
