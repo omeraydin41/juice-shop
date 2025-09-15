@@ -4,7 +4,7 @@ on:
   workflow_dispatch:   # Manuel çalıştırma
   push:
     branches:
-      - main        # Main branch'e push olunca da çalışacak
+      - master        # Main branch'e push olunca da çalışacak
 
 jobs:
   build-and-sbom:
